@@ -16,7 +16,7 @@ where
 {
     use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
-    Ok(opt.unwrap_or_else(|| default_test_a() ))
+    Ok(opt.unwrap_or_else(default_test_a ))
 }
 
 #[inline(always)]
@@ -26,7 +26,7 @@ where
 {
     use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
-    Ok(opt.unwrap_or_else(|| default_test_b_b() ))
+    Ok(opt.unwrap_or_else(default_test_b_b ))
 }
 
 #[inline(always)]

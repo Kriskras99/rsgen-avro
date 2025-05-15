@@ -17,7 +17,7 @@ where
 {
     use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
-    Ok(opt.unwrap_or_else(|| default_datelogicaltype_birthday() ))
+    Ok(opt.unwrap_or_else(default_datelogicaltype_birthday ))
 }
 
 #[inline(always)]
@@ -27,7 +27,7 @@ where
 {
     use serde::Deserialize;
     let opt = Option::deserialize(deserializer)?;
-    Ok(opt.unwrap_or_else(|| default_datelogicaltype_release_datetime_micro() ))
+    Ok(opt.unwrap_or_else(default_datelogicaltype_release_datetime_micro ))
 }
 
 #[inline(always)]

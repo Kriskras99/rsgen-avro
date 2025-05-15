@@ -188,21 +188,21 @@ impl<'de> serde::Deserialize<'de> for UnionStringLongDoubleBooleanBytes {
             where
                 E: serde::de::Error,
             {
-                Ok(UnionStringLongDoubleBooleanBytes::Long(value.into()))
+                Ok(UnionStringLongDoubleBooleanBytes::Long(value))
             }
 
             fn visit_f64<E>(self, value: f64) -> Result<Self::Value, E>
             where
                 E: serde::de::Error,
             {
-                Ok(UnionStringLongDoubleBooleanBytes::Double(value.into()))
+                Ok(UnionStringLongDoubleBooleanBytes::Double(value))
             }
 
             fn visit_bool<E>(self, value: bool) -> Result<Self::Value, E>
             where
                 E: serde::de::Error,
             {
-                Ok(UnionStringLongDoubleBooleanBytes::Boolean(value.into()))
+                Ok(UnionStringLongDoubleBooleanBytes::Boolean(value))
             }
 
             fn visit_bytes<E>(self, value: &[u8]) -> Result<Self::Value, E>

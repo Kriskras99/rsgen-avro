@@ -21,7 +21,7 @@ where
     #[derive(serde::Deserialize)]
     struct Wrapper(#[serde(with = "chrono::serde::ts_seconds")] chrono::DateTime<chrono::Utc>);
     let opt = Option::<Wrapper>::deserialize(deserializer)?.map(|w| w.0);
-    Ok(opt.unwrap_or_else(|| default_datelogicaltype_birthday() ))
+    Ok(opt.unwrap_or_else(default_datelogicaltype_birthday ))
 }
 
 #[inline(always)]
@@ -33,7 +33,7 @@ where
     #[derive(serde::Deserialize)]
     struct Wrapper(#[serde(with = "chrono::serde::ts_microseconds")] chrono::DateTime<chrono::Utc>);
     let opt = Option::<Wrapper>::deserialize(deserializer)?.map(|w| w.0);
-    Ok(opt.unwrap_or_else(|| default_datelogicaltype_release_datetime_micro() ))
+    Ok(opt.unwrap_or_else(default_datelogicaltype_release_datetime_micro ))
 }
 
 #[inline(always)]

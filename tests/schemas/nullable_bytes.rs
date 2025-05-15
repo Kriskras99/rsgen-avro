@@ -17,7 +17,7 @@ where
     #[derive(serde::Deserialize)]
     struct Wrapper(#[serde(with = "apache_avro::serde_avro_bytes")] Vec<u8>);
     let opt = Option::<Wrapper>::deserialize(deserializer)?.map(|w| w.0);
-    Ok(opt.unwrap_or_else(|| default_bytesdata_b() ))
+    Ok(opt.unwrap_or_else(default_bytesdata_b ))
 }
 
 #[inline(always)]
