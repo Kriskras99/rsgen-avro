@@ -40,4 +40,5 @@ pub mod simple_with_schemas_impl;
 pub mod nested_with_schemas_impl;
 pub mod nested_with_float;
 
+pub mod roundtrip;
 pub mod utils;

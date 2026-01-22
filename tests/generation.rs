@@ -1,6 +1,8 @@
 #[rustfmt::skip]
 mod schemas;
 
+use std::path::Path;
+
 use apache_avro::schema::Name;
 use pretty_assertions::assert_eq;
 use rsgen_avro::{Error, FieldOverride, Generator, ImplementAvroSchema, Result, Source};
@@ -10,7 +12,7 @@ fn validate_generation(file_name: &str, g: Generator) {
 
     let generated = String::from_utf8(buf).unwrap();
     let expected = std::fs::read_to_string(format!("tests/schemas/{file_name}.rs")).unwrap();
-    validate(expected, generated)
+    validate(expected, generated, format!("tests/schemas/{file_name}.rs"))
 }
 
 fn generate(file_name: &str, g: Generator) -> Result<Vec<u8>> {
@@ -22,12 +24,16 @@ fn generate(file_name: &str, g: Generator) -> Result<Vec<u8>> {
     Ok(buf)
 }
 
-fn validate(expected: String, generated: String) {
-    assert_eq!(
-        expected, generated,
-        "\n\n>>>>>>>>>>>>>>>>> Expected: \n{}\n>>>>>>>>>>>>>>>>> But generated: \n{}",
-        expected, generated
-    );
+fn validate(expected: String, generated: String, path: impl AsRef<Path>) {
+    let overwrite = std::env::var("GENERATION_OVERWRITE").is_ok_and(|s| s.to_lowercase() == "true");
+    if overwrite {
+        std::fs::write(path.as_ref(), generated).unwrap();
+    } else {
+        assert_eq!(
+            expected, generated,
+            "Use `GENERATION_OVERWRITE=true` to overwrite all generated files"
+        );
+    }
 }
 
 #[test]
@@ -122,7 +128,11 @@ fn gen_nested_with_schema_impl() {
         .unwrap();
     let generated = String::from_utf8(buf).unwrap();
     let expected = std::fs::read_to_string("tests/schemas/nested_with_schemas_impl.rs").unwrap();
-    validate(expected, generated)
+    validate(
+        expected,
+        generated,
+        "tests/schemas/nested_with_schemas_impl.rs",
+    )
 }
 
 #[test]
@@ -152,7 +162,13 @@ fn gen_mono_valued_union() {
 
 #[test]
 fn gen_multi_valued_union() {
-    validate_generation("multi_valued_union", Generator::new().unwrap());
+    validate_generation(
+        "multi_valued_union",
+        Generator::builder()
+            .implement_avro_schema(ImplementAvroSchema::CopyBuildSchema)
+            .build()
+            .unwrap(),
+    );
 }
 
 #[test]
@@ -168,7 +184,11 @@ fn gen_multi_valued_union_nested() {
     Generator::new().unwrap().generate(&src, &mut buf).unwrap();
     let generated = String::from_utf8(buf).unwrap();
     let expected = std::fs::read_to_string("tests/schemas/multi_valued_union_nested.rs").unwrap();
-    validate(expected, generated)
+    validate(
+        expected,
+        generated,
+        "tests/schemas/multi_valued_union_nested.rs",
+    )
 }
 
 #[test]

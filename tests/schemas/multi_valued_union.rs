@@ -156,3 +156,16 @@ impl<'de> serde::Deserialize<'de> for UnionStringLongDoubleBoolean {
 pub struct Contact {
     pub extra: Option<UnionStringLongDoubleBoolean>,
 }
+impl ::apache_avro::schema::AvroSchema for Contact {
+    fn get_schema() -> ::apache_avro::schema::Schema {
+        static SCHEMA: ::std::sync::LazyLock::<apache_avro::Schema> = ::std::sync::LazyLock::new(|| {
+            ::apache_avro::schema::Schema::parse_str(r#"{"name":"Contact","type":"record","fields":[{"name":"extra","type":["null","string","long","double","boolean"]}]}"#).expect("parsing of canonical form cannot fail")
+        });
+        SCHEMA.clone()
+    }
+}
+#[cfg(test)]
+#[test]
+fn test_contact_avro_schema_impl() {
+    <Contact as ::apache_avro::schema::AvroSchema>::get_schema();
+}
